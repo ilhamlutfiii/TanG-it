@@ -1,47 +1,34 @@
-version: "3.8"
+version: '2'
 services:
-  app:
-    build:
-      args:
-        user: '1012'
-        uid: 1000
-      context: ./
-      dockerfile: Dockerfile
-    image: tangit
-    container_name: tangit-app
-    restart: unless-stopped
-    working_dir: /var/www/
+  web:
+    build: docker/nginx
     volumes:
-      - ./:/var/www
-    networks:
-      - tangit
-
+      - .:/app
+    ports: 
+      - "8080:80"
+    links:
+      - php
+    tty: true
+    restart: always
+  php:
+    build: docker/php-fpm
+    volumes:
+      - .:/app
+    working_dir: /app
+    links:
+      - db
+    tty: true
+    restart: always
   db:
-    image: mysql:8.0
-    container_name: tangit-db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: tangit
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_PASSWORD: password
-      MYSQL_USER: admin
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    networks:
-      - tangit
-
-  nginx:
-    image: nginx:alpine
-    container_name: tangit-nginx
-    restart: unless-stopped
+    image: mariadb:latest
     ports:
-      - 8000:80
+      - "3306:3306"
     volumes:
-      - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d/
-    networks:
-      - tangit
-
-networks:
-  tangit:
-    driver: bridge
+      - /private/var/lib/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: tangit
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+    tty: true
+    restart: always
