@@ -3,7 +3,8 @@ services:
   web:
     build: docker/nginx
     volumes:
-      - .:/app
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
     ports: 
       - "8080:80"
     links:
@@ -24,7 +25,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /private/var/lib/mysql:/var/lib/mysql
+      - /var/lib/mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: tangit
