@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$conn = mysqli_connect("localhost", "root", "", "tang-it");
+include "conn.php";
 require '../config/functions.php';
 
 // ambil data di url

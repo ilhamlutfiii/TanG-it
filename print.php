@@ -2,8 +2,7 @@
 <?php
 session_start();
 
-$conn = mysqli_connect("localhost", "root", "", "tang-it");
-
+include "conn.php";
 
 include "cart.php";
 

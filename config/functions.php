@@ -1,8 +1,6 @@
 <?php  
 // koneksi dbms
-$conn = mysqli_connect("localhost","root","","tang-it");
-
-
+include "conn.php";
 
 function query($query){
   global $conn;
