@@ -22,16 +22,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Install Mysql
-FROM mysql:latest
-
-ADD sql /src/sql
-ADD scripts /src/scripts
-
-RUN /src/scripts/prepare_sql_files.sh
-
-ADD /src/scripts /docker-entrypoint-initdb.d
-
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
